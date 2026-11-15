@@ -29,6 +29,7 @@ public class ZonaLlegadaTutorial : MonoBehaviour
             if (controlador != null)
             {
                 controlador.MostrarInstruccion(2);
+                controlador.ApagarLuzEscritorio();
             }
 
             GetComponent<Collider>().enabled = false;

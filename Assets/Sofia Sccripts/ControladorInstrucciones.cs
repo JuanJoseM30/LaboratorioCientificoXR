@@ -14,12 +14,20 @@ public class ControladorInstrucciones : MonoBehaviour
     public TMP_Text texto3;
     public TMP_Text texto4;
 
+    [Header("Iluminación del tutorial")]
+    public Light luzEscritorio;
+    public Light luzMatrazRosa;
+    public Light luzZonaMatrazRosa;
+    public Light luzMatrazAzul;
+    public Light luzZonaMatrazAzul;
+    public Light luzPalanca;
     void Start()
     {
         panelBienvenida.SetActive(true);
         fondoPanel.SetActive(false);
 
         OcultarInstrucciones();
+        ApagarTodasLasLuces();
     }
 
     public void ComenzarInduccion()
@@ -28,6 +36,36 @@ public class ControladorInstrucciones : MonoBehaviour
         fondoPanel.SetActive(true);
 
         MostrarInstruccion(1);
+
+        if (luzEscritorio != null)
+            luzEscritorio.enabled = true;
+    }
+
+    public void ApagarLuzEscritorio()
+    {
+        if (luzEscritorio != null)
+            luzEscritorio.enabled = false;
+    }
+
+    void ApagarTodasLasLuces()
+    {
+        if (luzEscritorio != null)
+            luzEscritorio.enabled = false;
+
+        if (luzMatrazRosa != null)
+            luzMatrazRosa.enabled = false;
+
+        if (luzZonaMatrazRosa != null)
+            luzZonaMatrazRosa.enabled = false;
+
+        if (luzMatrazAzul != null)
+            luzMatrazAzul.enabled = false;
+
+        if (luzZonaMatrazAzul != null)
+            luzZonaMatrazAzul.enabled = false;
+
+        if (luzPalanca != null)
+            luzPalanca.enabled = false;
     }
 
     public void MostrarInstruccion(int numero)
@@ -36,6 +74,24 @@ public class ControladorInstrucciones : MonoBehaviour
         texto2.gameObject.SetActive(numero == 2);
         texto3.gameObject.SetActive(numero == 3);
         texto4.gameObject.SetActive(numero == 4);
+
+        // Actividad 2: matraz rosa
+        if (luzMatrazRosa != null)
+            luzMatrazRosa.enabled = numero == 2;
+
+        if (luzZonaMatrazRosa != null)
+            luzZonaMatrazRosa.enabled = numero == 2;
+
+        // Actividad 3: matraz azul
+        if (luzMatrazAzul != null)
+            luzMatrazAzul.enabled = numero == 3;
+
+        if (luzZonaMatrazAzul != null)
+            luzZonaMatrazAzul.enabled = numero == 3;
+
+        // Actividad 4: palanca de ventilación
+        if (numero == 4 && luzPalanca != null)
+            luzPalanca.enabled = true;
     }
 
     public void OcultarInstrucciones()
