@@ -20,7 +20,7 @@ public class ControladorInstrucciones : MonoBehaviour
     public Light luzZonaMatrazRosa;
     public Light luzMatrazAzul;
     public Light luzZonaMatrazAzul;
-
+    public Light luzPalanca;
     void Start()
     {
         panelBienvenida.SetActive(true);
@@ -63,6 +63,9 @@ public class ControladorInstrucciones : MonoBehaviour
 
         if (luzZonaMatrazAzul != null)
             luzZonaMatrazAzul.enabled = false;
+
+        if (luzPalanca != null)
+            luzPalanca.enabled = false;
     }
 
     public void MostrarInstruccion(int numero)
@@ -85,6 +88,10 @@ public class ControladorInstrucciones : MonoBehaviour
 
         if (luzZonaMatrazAzul != null)
             luzZonaMatrazAzul.enabled = numero == 3;
+
+        // Actividad 4: palanca de ventilación
+        if (numero == 4 && luzPalanca != null)
+            luzPalanca.enabled = true;
     }
 
     public void OcultarInstrucciones()
