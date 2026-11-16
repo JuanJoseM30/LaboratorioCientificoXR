@@ -6,35 +6,56 @@ using TMPro;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-// Va en el VasoMezcla. Revisa qué reactivo se suelta en el socket del vaso.
+// Va en el VasoMezcla. Revisa qué reactivo se echa y muestra la reacción química.
 public class SocketValidador : MonoBehaviour
 {
+    // Datos de cada reactivo incorrecto: su resultado y su mensaje
+    [System.Serializable]
+    public class ReactivoIncorrecto
+    {
+        public GameObject reactivo;
+        public Material resultado;
+        [TextArea(2, 4)] public string mensaje;
+    }
+
     [Header("Socket del vaso")]
     public XRSocketInteractor socket;
 
-    [Header("Reactivos")]
+    [Header("Reactivo correcto")]
     public GameObject reactivoCorrecto;
-    public GameObject[] reactivosIncorrectos;
+    public Material resultadoCorrecto;
+    [TextArea(2, 4)] public string mensajeCorrecto;
 
-    [Header("Líquido del vaso y colores de la mezcla")]
+    [Header("Reactivos incorrectos")]
+    public ReactivoIncorrecto[] reactivosIncorrectos;
+
+    [Header("Líquido del vaso")]
     public Renderer liquidoDelVaso;
-    [Tooltip("Número de la ranura del material del líquido (0 si es un cilindro)")]
     public int ranuraDelLiquido = 0;
-    public Material materialMezclaCorrecta;
-    public Material materialMezclaIncorrecta;
+
+    [Header("Texto donde se explica la reacción (opcional)")]
+    public TMP_Text textoReaccion;
+
+    [Header("Efectos visuales (opcional)")]
+    public GameObject efectoCorrecto;
+    public GameObject efectoIncorrecto;
 
     [Header("Cuánto tarda el tubo en desaparecer (segundos)")]
     public float tiempoAntesDeDesaparecer = 0.5f;
 
-    [Header("Tarea que se tacha al acertar (opcional)")]
-    public TMP_Text textoTarea;
-
-    [Header("Eventos (conectar al ScoreManager)")]
+    [Header("Eventos (conectar al ScoreManager, tareas, luces...)")]
     public UnityEvent alMezclaCorrecta;
     public UnityEvent alMezclaIncorrecta;
 
     private bool mezclaHecha = false;
     private HashSet<GameObject> erroresYaContados = new HashSet<GameObject>();
+
+    private void Start()
+    {
+        if (textoReaccion != null) textoReaccion.text = "";
+        if (efectoCorrecto != null) efectoCorrecto.SetActive(false);
+        if (efectoIncorrecto != null) efectoIncorrecto.SetActive(false);
+    }
 
     private void OnEnable()
     {
@@ -52,49 +73,53 @@ public class SocketValidador : MonoBehaviour
 
         if (mezclaHecha)
         {
-            // La mezcla ya está lista: no acepta nada más
             StartCoroutine(Rechazar());
             return;
         }
 
+        // ¿Es el correcto?
         if (objeto == reactivoCorrecto)
         {
             mezclaHecha = true;
-            CambiarColor(materialMezclaCorrecta);
+            CambiarColor(resultadoCorrecto);
+            MostrarMensaje(mensajeCorrecto);
+            ActivarEfecto(efectoCorrecto);
 
-            if (textoTarea != null)
-                textoTarea.fontStyle |= FontStyles.Strikethrough;
-
-            Debug.Log("[SocketValidador] ¡Reactivo correcto! Mezcla hecha.");
+            Debug.Log("[SocketValidador] ¡Reacción correcta! " + objeto.name);
             alMezclaCorrecta.Invoke();
             StartCoroutine(Desaparecer(objeto));
+            return;
         }
-        else if (EsIncorrecto(objeto))
+
+        // ¿Es uno de los incorrectos?
+        ReactivoIncorrecto incorrecto = BuscarIncorrecto(objeto);
+        if (incorrecto != null)
         {
-            CambiarColor(materialMezclaIncorrecta);
+            CambiarColor(incorrecto.resultado);
+            MostrarMensaje(incorrecto.mensaje);
+            ActivarEfecto(efectoIncorrecto);
 
             if (erroresYaContados.Add(objeto))
             {
-                Debug.Log("[SocketValidador] Reactivo incorrecto: " + objeto.name);
+                Debug.Log("[SocketValidador] Reacción incorrecta: " + objeto.name);
                 alMezclaIncorrecta.Invoke();
             }
 
             StartCoroutine(Desaparecer(objeto));
+            return;
         }
-        else
-        {
-            // No es un reactivo (ej: la probeta): se rechaza sin error
-            StartCoroutine(Rechazar());
-        }
+
+        // No es un reactivo (ej: la probeta): se rechaza sin error
+        StartCoroutine(Rechazar());
     }
 
-    private bool EsIncorrecto(GameObject objeto)
+    private ReactivoIncorrecto BuscarIncorrecto(GameObject objeto)
     {
-        foreach (GameObject r in reactivosIncorrectos)
+        foreach (ReactivoIncorrecto r in reactivosIncorrectos)
         {
-            if (r == objeto) return true;
+            if (r != null && r.reactivo == objeto) return r;
         }
-        return false;
+        return null;
     }
 
     private void CambiarColor(Material material)
@@ -109,14 +134,25 @@ public class SocketValidador : MonoBehaviour
         }
     }
 
-    // El tubo se queda un momento (como vertiendo) y luego desaparece
+    private void MostrarMensaje(string mensaje)
+    {
+        if (textoReaccion != null) textoReaccion.text = mensaje;
+    }
+
+    // Reinicia el efecto para que se vea cada vez que se usa
+    private void ActivarEfecto(GameObject efecto)
+    {
+        if (efecto == null) return;
+        efecto.SetActive(false);
+        efecto.SetActive(true);
+    }
+
     private IEnumerator Desaparecer(GameObject objeto)
     {
         yield return new WaitForSeconds(tiempoAntesDeDesaparecer);
         objeto.SetActive(false);
     }
 
-    // Apaga el socket un momento para que suelte el objeto
     private IEnumerator Rechazar()
     {
         yield return null;
