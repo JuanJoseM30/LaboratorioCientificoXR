@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
@@ -33,13 +32,10 @@ public class PalancaEmergencia : MonoBehaviour
         palanca.onLeverActivate.RemoveListener(AlActivarPalanca);
     }
 
-    // Se llamará cuando comience la emergencia
     public void PrepararEmergencia()
     {
         emergenciaActiva = true;
         ventilacionIntentada = false;
-
-        // Devolver la palanca a su posición inicial
         palanca.value = false;
 
         Debug.Log("Emergencia preparada. Palanca reiniciada.");
@@ -47,20 +43,25 @@ public class PalancaEmergencia : MonoBehaviour
 
     private void AlActivarPalanca()
     {
-        if (!emergenciaActiva)
-            return;
-
-        if (ventilacionIntentada)
+        if (!emergenciaActiva || ventilacionIntentada)
             return;
 
         ventilacionIntentada = true;
 
-        Debug.Log("¡FALLO! La ventilación no responde.");
+        Debug.LogWarning("¡FALLO! La ventilación no responde.");
 
         AlFallarVentilacion.Invoke();
     }
 
-    // Permite consultar si ya se intentó activar la ventilación
+    public void FinalizarEmergencia()
+    {
+        emergenciaActiva = false;
+        ventilacionIntentada = false;
+        palanca.value = false;
+
+        Debug.Log("Palanca de emergencia desactivada.");
+    }
+
     public bool VentilacionIntentada()
     {
         return ventilacionIntentada;
