@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR.Content.Interaction;
@@ -24,24 +25,28 @@ public class PalancaEmergencia : MonoBehaviour
 
     private void OnEnable()
     {
-        palanca.onLeverActivate.AddListener(AlActivarPalanca);
+        // Detectar cuando el jugador baja la palanca
+        palanca.onLeverDeactivate.AddListener(AlDesactivarPalanca);
     }
 
     private void OnDisable()
     {
-        palanca.onLeverActivate.RemoveListener(AlActivarPalanca);
+        palanca.onLeverDeactivate.RemoveListener(AlDesactivarPalanca);
     }
 
     public void PrepararEmergencia()
     {
         emergenciaActiva = true;
         ventilacionIntentada = false;
-        palanca.value = false;
 
-        Debug.Log("Emergencia preparada. Palanca reiniciada.");
+        // IMPORTANTE:
+        // No modificamos palanca.value.
+        // El mechero debe permanecer encendido.
+
+        Debug.Log("Emergencia preparada. El mechero continúa encendido.");
     }
 
-    private void AlActivarPalanca()
+    private void AlDesactivarPalanca()
     {
         if (!emergenciaActiva || ventilacionIntentada)
             return;
@@ -57,7 +62,6 @@ public class PalancaEmergencia : MonoBehaviour
     {
         emergenciaActiva = false;
         ventilacionIntentada = false;
-        palanca.value = false;
 
         Debug.Log("Palanca de emergencia desactivada.");
     }
