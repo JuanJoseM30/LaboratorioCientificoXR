@@ -5488,9 +5488,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7459442142708147920, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 302011907}
-    - targetCorrespondingSourceObject: {fileID: 7459442142708147920, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 302011906}
   m_SourcePrefab: {fileID: 100100000, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
 --- !u!1 &302011902 stripped
 GameObject:
@@ -5518,23 +5515,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5202211970501327854, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
   m_PrefabInstance: {fileID: 302011901}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &302011906
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 302011902}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98bc8b0b105a71e428b7b30b54775cda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PalancaEmergencia
-  palanca: {fileID: 302011903}
-  emergenciaActiva: 0
-  AlFallarVentilacion:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &302011907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8580,6 +8560,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e601cf28e9702c945abe3b90e7f51974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &516094380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 516094376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98bc8b0b105a71e428b7b30b54775cda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PalancaEmergencia
+  palanca: {fileID: 516094378}
+  emergenciaActiva: 0
+  AlFallarVentilacion:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1001 &518731668
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9364,6 +9361,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7459442142708147920, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 516094377}
+    - targetCorrespondingSourceObject: {fileID: 7459442142708147920, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 516094380}
   m_SourcePrefab: {fileID: 100100000, guid: 36eff8b49ecdca745894efb1d2ce5f8f, type: 3}
 --- !u!1001 &621744652
 PrefabInstance:
@@ -30550,7 +30550,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7748243252877624316, guid: 0a65198f3cbcab345bc0b33f23a45e76, type: 3}
       propertyPath: m_Volume
-      value: 0.404
+      value: 0.323
       objectReference: {fileID: 0}
     - target: {fileID: 7748243252877624316, guid: 0a65198f3cbcab345bc0b33f23a45e76, type: 3}
       propertyPath: m_PlayOnAwake
@@ -42525,7 +42525,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EmergenciaManager
   tiempoMaximo: 180
   tiempoAntesDeExplosion: 2
-  palancaVentilacion: {fileID: 302011906}
+  palancaVentilacion: {fileID: 516094380}
   protocolo: {fileID: 1591291968}
   explosion: {fileID: 372006750}
   humo: {fileID: 1251099422}

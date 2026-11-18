@@ -250,36 +250,37 @@ public class EmergenciaManager : MonoBehaviour
 
     private IEnumerator ParpadearLuces()
     {
-        float tiempo = 0f;
+        Color rojoEmergencia = new Color(1f, 0f, 0f);
+
+        // Tiempo que permanece cada estado
+        float duracionEncendida = 0.45f;
+        float duracionApagada = 0.35f;
 
         while (emergenciaActiva)
         {
-            tiempo += Time.deltaTime;
-
-            // Transición suave entre la luz original y un rojo moderado.
-            float intensidadRoja = (Mathf.Sin(tiempo * 2.5f) + 1f) * 0.5f;
-
+            // FASE ROJA: luces encendidas en rojo intenso
             for (int i = 0; i < lucesEmergencia.Length; i++)
             {
                 if (lucesEmergencia[i] == null)
                     continue;
 
-                Color rojoSuave = new Color(1f, 0.12f, 0.12f);
-
-                lucesEmergencia[i].color = Color.Lerp(
-                    coloresOriginales[i],
-                    rojoSuave,
-                    intensidadRoja * 0.65f
-                );
-
-                lucesEmergencia[i].intensity = Mathf.Lerp(
-                    intensidadesOriginales[i],
-                    intensidadesOriginales[i] * 0.75f,
-                    intensidadRoja
-                );
+                lucesEmergencia[i].color = rojoEmergencia;
+                lucesEmergencia[i].intensity = intensidadesOriginales[i] * 2.5f;
             }
 
-            yield return null;
+            yield return new WaitForSeconds(duracionEncendida);
+
+            // FASE NORMAL: recuperar temporalmente la iluminación original
+            for (int i = 0; i < lucesEmergencia.Length; i++)
+            {
+                if (lucesEmergencia[i] == null)
+                    continue;
+
+                lucesEmergencia[i].color = coloresOriginales[i];
+                lucesEmergencia[i].intensity = intensidadesOriginales[i] * 0.2f;
+            }
+
+            yield return new WaitForSeconds(duracionApagada);
         }
     }
 
