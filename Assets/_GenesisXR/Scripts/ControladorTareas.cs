@@ -19,6 +19,9 @@ public class ControladorTareas : MonoBehaviour
     [Header("Luces guía de cada tarea (mismo orden, opcional)")]
     public LucesDeTarea[] lucesPorTarea;
 
+    [Header("Sonido al completar una tarea (opcional)")]
+    public AudioSource sonidoTarea;
+
     // Tarea que el jugador debe hacer ahora (1 = la primera)
     private int tareaActual = 0;
 
@@ -54,6 +57,7 @@ public class ControladorTareas : MonoBehaviour
 
         EncenderLuces(numero, false);
         Debug.Log("[ControladorTareas] Tarea " + numero + " completada");
+        if (sonidoTarea != null) sonidoTarea.Play();
 
         tareaActual++;
         MostrarTarea(tareaActual);
