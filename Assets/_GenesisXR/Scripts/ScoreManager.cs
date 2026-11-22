@@ -68,6 +68,11 @@ public class ScoreManager : MonoBehaviour
         Debug.Log("[Puntos] Segundos sobrantes: " + segundosSobrantes.ToString("0"));
     }
 
+    public void RegistrarSegundosDe(EmergenciaManager emergencia)
+    {
+        if (emergencia != null) RegistrarSegundosSobrantes(emergencia.TiempoRestante);
+    }
+
     // ===== Cálculo y resultados =====
 
     public int CalcularPuntuacion()

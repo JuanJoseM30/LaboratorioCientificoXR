@@ -50,8 +50,12 @@ public class ProtocoloEmergencia : MonoBehaviour
         if (pasoActual == 0)
         {
             pasoActual = 1;
-            Debug.Log("PROTOCOLO: Válvula de alivio activada.");
+            Debug.Log("PROTOCOLO: VÃ¡lvula de alivio activada.");
             alAvanzarPaso?.Invoke();
+        }
+        else if (pasoActual == 1)
+        {
+            return; // ya estaba pulsado: se ignora el rebote
         }
         else if (pasoActual != 3)
         {
@@ -67,6 +71,10 @@ public class ProtocoloEmergencia : MonoBehaviour
             Debug.Log("PROTOCOLO: Reactivos aislados.");
             alAvanzarPaso?.Invoke();
         }
+        else if (pasoActual == 2)
+        {
+            return; // ya estaba pulsado: se ignora el rebote
+        }
         else if (pasoActual != 3)
         {
             FallarSecuencia();
@@ -79,7 +87,7 @@ public class ProtocoloEmergencia : MonoBehaviour
         {
             pasoActual = 3;
 
-            Debug.Log("PROTOCOLO COMPLETADO: Extracción restablecida.");
+            Debug.Log("PROTOCOLO COMPLETADO: Extracciï¿½n restablecida.");
 
             alAvanzarPaso?.Invoke();
             alCompletarProtocolo?.Invoke();
