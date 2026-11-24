@@ -1,12 +1,15 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
-
+using TMPro;
 public class EmergenciaManager : MonoBehaviour
 {
     [Header("Duración de la emergencia")]
     [SerializeField] private float tiempoMaximo = 60f;
     [SerializeField] private float tiempoAntesDeExplosion = 2f;
+
+    [Header("Cronómetro en pantalla")]
+    [SerializeField] private TMP_Text textoCronometro;
 
     [Header("Scripts de interacción")]
     [SerializeField] private PalancaEmergencia palancaVentilacion;
@@ -42,6 +45,7 @@ public class EmergenciaManager : MonoBehaviour
 
     public float TiempoRestante => tiempoRestante;
     public bool EmergenciaActiva => emergenciaActiva;
+
 
     private void Awake()
     {
@@ -89,6 +93,11 @@ public class EmergenciaManager : MonoBehaviour
 
         emergenciaActiva = true;
         tiempoRestante = tiempoMaximo;
+        if (textoCronometro != null)
+        {
+            textoCronometro.gameObject.SetActive(true);
+            ActualizarCronometro();
+        }
 
         Debug.Log("EMERGENCIA: iniciando protocolo.");
 
@@ -144,6 +153,7 @@ public class EmergenciaManager : MonoBehaviour
             return;
 
         tiempoRestante -= Time.deltaTime;
+        ActualizarCronometro();
 
         if (tiempoRestante <= 0f)
         {
@@ -306,5 +316,15 @@ public class EmergenciaManager : MonoBehaviour
             lucesEmergencia[i].color = coloresOriginales[i];
             lucesEmergencia[i].intensity = intensidadesOriginales[i];
         }
+    }
+    private void ActualizarCronometro()
+    {
+        if (textoCronometro == null) return;
+
+        int minutos = Mathf.FloorToInt(tiempoRestante / 60f);
+        int segundos = Mathf.FloorToInt(tiempoRestante % 60f);
+
+        textoCronometro.text = minutos.ToString("00") + ":" +
+                               segundos.ToString("00");
     }
 }
